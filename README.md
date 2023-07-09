@@ -1,2 +1,3 @@
-# finland-ais-p
-Finland articles in store
+# Alko Puppeteer web scraper
+
+Web scraper to run with puppeteer.
