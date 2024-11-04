@@ -47,7 +47,25 @@ const main = async () => {
     const urls = [];
     $('a[data-url]').each((index, element) => {
       const url = $(element).attr('data-url');
-      urls.push(url);
+      const stockElement = $(element).find('span.number-in-stock');
+      const stockNumber = stockElement.text().trim(); // Get the text and trim whitespace
+
+      const numbers = stockNumber.split("-")
+
+      let stockNumberCalculated = 0
+
+
+      if (numbers.length === 2){
+        const sum = parseInt(numbers[0]) + parseInt(numbers[1]);
+        stockNumberCalculated = sum / 2;
+      } else {
+        stockNumberCalculated = parseInt(numbers[0])
+      }
+    
+      urls.push({
+        url: url,
+        stockNumber: stockNumberCalculated,
+      });
     });
 
     if (urls.length < 1) {
@@ -60,15 +78,14 @@ const main = async () => {
 
     for (const urlData of urls) {
 
-      const url = new URL(urlData);
+      const url = new URL(urlData.url);
       const searchParams = new URLSearchParams(url.search);
 
       const storeId = searchParams.get('StoreID');
-      const storeStock = searchParams.get('StoreStock');
       collectedData.push({
         "articleNr": article.articleNr,
         "storeNr": storeId,
-        "stock": storeStock,
+        "stock": urlData.stockNumber,
       })
     }
 
